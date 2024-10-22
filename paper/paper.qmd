@@ -1,10 +1,10 @@
 ---
-title: "My title"
-subtitle: "My subtitle if needed"
+title: "A Prediction of the 2024 U.S. Election"
+subtitle: "Prediction Based on MRP Analysis of Harris Lost"
 author: 
-  - First author
+  - Shanjie Jiao
   - Another author
-thanks: "Code and data are available at: [https://github.com/RohanAlexander/starter_folder](https://github.com/RohanAlexander/starter_folder)."
+thanks: "Code and data are available at: [https://github.com/Jie-jiao05/2024_US_Election.git)."
 date: today
 date-format: long
 abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
@@ -25,16 +25,20 @@ library(palmerpenguins)
 
 # Introduction
 
-Overview paragraph
+###Overview paragraph
+The United States, as the world’s largest economy and most influential country, will hold its presidential election on November 5, 2024. Despite facing domestic challenges such as inflation, low employment rates after the pandemic, and increasing political polarization due to conflicts between the Democratic and Republican parties, which have accelerated internal tensions.As of October 2024, former President Donald Trump has secured the Republican Party nomination. However, after assassination happened on July 14, 2024, many of his supporters have become even more committed to his legacy. Meanwhile, President Joe Biden withdrew from the election on July 21, leading to the nomination of Kamala Harris as the Democratic candidate. These events have made the 2024 U.S. election increasingly complex and unpredictable, further intensifying uncertainty about the future.
 
-Estimand paragraph
 
-Results paragraph
 
-Why it matters paragraph
+###Estimand paragraph
+In this paper, multiple linear regression will be used to fit the dataset provide by Five Thirty Eight[use citation] to estimate Trump's election rate. 
 
-Telegraphing paragraph: The remainder of this paper is structured as follows. @sec-data....
+###Results paragraph
 
+###Why it matters paragraph：
+Due to the United States' hegemonic position and unparalleled global influence, the outcome of the U.S. election will serve as a guiding light for global developments over the next four years, significantly impacting international security, trade, cooperation, and geopolitics. This article aims to provide a clearer analytical framework for political scientists, the general public, journalists, corporate strategists, and anyone globally concerned with the U.S. election.
+
+Telegraphing paragraph: The remainder of this paper is structured as follows. @sec-data we will discuss the MLR used in the prediction and the result of the MLR with its predictor variables and the response after transformation. @sec-dis the shortcomings of the study and areas for improvement will be described. @sec-A A Deep Dive to a pollster will be conducted, and @sec-B We will given a idealized survey and methodology
 
 
 
@@ -44,7 +48,11 @@ Telegraphing paragraph: The remainder of this paper is structured as follows. @s
 
 ## Overview
 
-We use the statistical programming language R [@citeR].... Our data [@shelter].... Following @tellingstories, we consider...
+We use the statistical programming language R [@citeR] to analysis the data which are extracted from the 2024 U.S. General President Election collected and published by FiveThirtyEight  [@citation later]. This paper will conduct a Multiple Linear Regression to do further prediction. In this model, we take numeric_grade, pollscore, sample_size as predictors, and pct as response. 
+
+## Data Cleaning
+
+To Simplify the dataset we extract the data of the pollater_id, pollster, methodology,  numeric_grade, pollscore, sample_size, pct, and transform Party and Answer into categorical (0=DEM, 1=REP and 0 = Harris, 1=Trump). In oreder to make the pollster more reliable we will only analysis that transparency are over 3  to increase the liability of this survey.
 
 Overview text
 

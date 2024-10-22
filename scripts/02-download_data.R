@@ -9,18 +9,20 @@
 
 
 #### Workspace setup ####
-library(opendatatoronto)
-library(tidyverse)
-# [...UPDATE THIS...]
+#### Workspace setup ####
+library(dplyr)
+library(readr)
 
-#### Download data ####
-# [...ADD CODE HERE TO DOWNLOAD...]
+#### Load data from Desktop ####
+# Define the file path to your dataset on the Desktop
+local_dataset_path <- "~/Desktop/president_polls.csv"
 
+# Load the dataset (from Desktop in this case)
+loaded_data <- read_csv(local_dataset_path)
 
+#### Save data to project directory ####
+# Define the output path relative to your GitHub project structure
+output_file <- "data/01-raw_data/raw_data.csv"
 
-#### Save data ####
-# [...UPDATE THIS...]
-# change the_raw_data to whatever name you assigned when you downloaded it.
-write_csv(the_raw_data, "inputs/data/raw_data.csv") 
-
-         
+# Write the loaded data to the specified path in your project directory
+write_csv(loaded_data, output_file)
