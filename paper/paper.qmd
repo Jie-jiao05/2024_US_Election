@@ -3,7 +3,8 @@ title: "A Prediction of the 2024 U.S. Election"
 subtitle: "Prediction Based on MRP Analysis of Harris Lost"
 author: 
   - Shanjie Jiao
-  - Another author
+  - Aman Rana
+  - Kevin Shen
 thanks: "Code and data are available at: [https://github.com/Jie-jiao05/2024_US_Election.git)."
 date: today
 date-format: long
