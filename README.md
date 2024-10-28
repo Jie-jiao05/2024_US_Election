@@ -2,14 +2,13 @@
 
 ## Overview
 
-This repo provides students with a foundation for their own projects associated with *Telling Stories with Data*. You do not need every aspect for every paper and you should delete aspects that you do not need.
-
+This repository includes the files and code used to develop a linear model predicting the outcome of the upcoming US presidential election using aggregated polling data. The project involves data cleaning, analysis, and modeling from sources like FiveThirtyEight and Survey design. The analysis examines the impact of factors such as pollster ratings, sample size, and poll scores on the predicted vote percentage for Donald Trump.
 
 ## File Structure
 
 The repo is structured as:
 
--   `data/raw_data` contains the raw data as obtained from X.
+-   `data/raw_data` contains the raw data as obtained from FiveThirtyEight.
 -   `data/analysis_data` contains the cleaned dataset that was constructed.
 -   `model` contains fitted models. 
 -   `other` contains relevant literature, details about LLM chat interactions, and sketches.
@@ -18,7 +17,7 @@ The repo is structured as:
 
 
 ## Statement on LLM usage
-
+LLM are used in this Work
 Aspects of the code were written with the help of the auto-complete tool, Codriver. The abstract and introduction were written with the help of ChatHorse and the entire chat history is available in inputs/llms/usage.txt.
 
 ## Some checks

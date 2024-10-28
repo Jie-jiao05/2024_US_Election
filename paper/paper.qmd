@@ -26,17 +26,20 @@ library(palmerpenguins)
 
 # Introduction
 
-###Overview paragraph
+## Overview paragraph
+
 The United States, as the world’s largest economy and most influential country, will hold its presidential election on November 5, 2024. Despite facing domestic challenges such as inflation, low employment rates after the pandemic, and increasing political polarization due to conflicts between the Democratic and Republican parties, which have accelerated internal tensions.As of October 2024, former President Donald Trump has secured the Republican Party nomination. However, after assassination happened on July 14, 2024, many of his supporters have become even more committed to his legacy. Meanwhile, President Joe Biden withdrew from the election on July 21, leading to the nomination of Kamala Harris as the Democratic candidate. These events have made the 2024 U.S. election increasingly complex and unpredictable, further intensifying uncertainty about the future.
 
 
 
-###Estimand paragraph
+## Estimand paragraph
+
 In this paper, multiple linear regression will be used to fit the dataset provide by Five Thirty Eight[use citation] to estimate Trump's election rate. 
 
-###Results paragraph
+## Results paragraph
 
-###Why it matters paragraph：
+## Why it matters paragraph：
+
 Due to the United States' hegemonic position and unparalleled global influence, the outcome of the U.S. election will serve as a guiding light for global developments over the next four years, significantly impacting international security, trade, cooperation, and geopolitics. This article aims to provide a clearer analytical framework for political scientists, the general public, journalists, corporate strategists, and anyone globally concerned with the U.S. election.
 
 Telegraphing paragraph: The remainder of this paper is structured as follows. @sec-data we will discuss the MLR used in the prediction and the result of the MLR with its predictor variables and the response after transformation. @sec-dis the shortcomings of the study and areas for improvement will be described. @sec-A A Deep Dive to a pollster will be conducted, and @sec-B We will given a idealized survey and methodology
@@ -94,14 +97,14 @@ And also planes (@fig-planes). (You can change the height and width, but don't w
 #| warning: false
 #| message: false
 
-analysis_data <- read_csv(here::here("data/02-analysis_data/analysis_data.csv"))
+#analysis_data <- read_csv(here::here("data/02-analysis_data/analysis_data.csv"))
 
-analysis_data |> 
-  ggplot(aes(x = width, y = length)) +
-  geom_point(alpha = 0.8) +
-  theme_minimal() +
-  labs(x = "Wing width (mm)",
-       y = "Wing length (mm)")
+#analysis_data |> 
+#  ggplot(aes(x = width, y = length)) +
+ # geom_point(alpha = 0.8) +
+  #theme_minimal() +
+  #labs(x = "Wing width (mm)",
+   #    y = "Wing length (mm)")
 ```
 
 Talk way more about it. 
@@ -203,10 +206,62 @@ Weaknesses and next steps should also be included.
 
 \appendix
 
-# Appendix {-}
+# Appendix 
 
+## B: Idealized Survey Methodology – $100K Budget
 
-# Additional data details
+### Introduction
+In this appendix, we outline an idealized survey methodology for forecasting U.S. presidential elections within a budget of up to $100,000. The proposed design aims to maximize accuracy and cost-efficiency by strategically selecting sample populations, targeting key demographic groups, and effectively aggregating results.
+
+### Sampling Strategy
+The ideal survey methodology employs a stratified random sampling approach, given the diversity of the American population as the target group. This method is designed to better analyze the varying effects of different races, age groups, genders, and education levels on voting trends by distributing the sample into multiple subgroups. By categorizing these key variables, this approach ensures more concise and clearer statistical results, which in turn facilitates in-depth analysis. The representative sample is listed below:
+
+- **Sampling Frame**: For the information security, valid entitlement holders registered on the voter list and registered with the Census Bureau will receive the survey. 
+- **Sampling Method**: Stratified random sampling will be implemented, ensuring better analyze the differential impact of different key factors, including races, ages, genders, and levels of education on voting trends.
+- **Sample Size**: The poll is expected to include responses from 10,000 individuals. Assuming nonresponse bias is 10%, we estimate the final adjusted sample size of approximately 9,000.
+- **Geographical Distribution**: The survey will be conducted across all 50 states and the District of Columbia. Considering that traditional "red" and "blue" states are less likely to change political alignments, an increased focus will be placed on polling within swing states. 
+
+### Recruitment Plan
+This survey will conduct recruiting in following methods:
+
+- **Online recruitment**: Advertisements and official information about the survey will be disseminated through various search engines (including Google and Firefox) and social media platforms such as X and Instagram. All advertisements will contain direct links to the Google Forms survey.  
+- **Phone recruitment**: Valid phone numbers will be contacted by staff to conduct the survey using the same set of questions as the online survey. For privacy and security, no conversations will be recorded, and the calling system will automatically dial numbers without disclosing them to staff members.
+- **In person recruitment**: A tent will be set up in key high-traffic regions in swing states to conduct survey in-person.
+- **Gift incentive**: To increase participation, all respondents will receive a specially designed pin, estimated to cost around $2 each. This incentive is intended to boost engagement and encourage broader participation in the survey.
+
+### Budgect Allocation
+
+- **Online Recruitment Cost**:   $20,000 allocated for advertising across various platforms (search engines and social media).
+- **Phone Recruitment Cost**: $20,000 allocated for hiring staff to conduct phone surveys and cover the associated data usage charges.
+- **In-Person Recruitment Cost**: $22,000 allocated for hiring field staff and setting up in-person recruitment locations.
+- **Gift Cost**: $20,000 allocated for the total value of participant gifts
+- **Data Analysis and Quality Control Cost**: $6,000 allocated for employing technical staff, purchasing software licenses, and utilizing required tools.
+- **Administrative Cost**: $2,000 allocated for overall management, including miscellaneous expenses and logistical support.
+
+Total Budget: $100,000
+
+### Survey Design
+This survey will only collect data that are accurate and unbigoted. Meanwhile, personal information will not be contained.
+
+- **Close-ended Question**: Usage of multiple choice can make sure the answer is straightforward and easier for analysis.
+- **Response Option**: Most questions will only contain option from A, B and “prefer not to say”, all the option will be a neutral response.
+- **Insensitive Information**: This survey will only contain personal information only and merely age, gender, race, education background, income, living state.
+
+### Data Process
+To ensure data we collected are valid and significant, we will conduct following methods to test our data.
+
+- **One-times Submission**: For online surveys, only one submission will be allowed per unique IP address to prevent multiple entries that could skew results. The same principle will apply to phone recruitment, ensuring each number is only surveyed once.
+- **Missing Data**: During the data cleaning process, responses with missing values (N/A entries) will be excluded to maintain the integrity and reliability of the analysis.
+- **Swing States Data Process**: Data collected from swing states will be assigned a slightly higher weight in the estimation process, given their critical influence on election outcomes.
+- **Stratified Analysis**: To gain insights into voter preferences within different demographic subgroups, stratified analyses will be conducted, focusing both on overall trends and trends within specific subgroups.
+- **Poll Aggregation Approach**: The aggregated data will be weighted based on sample size (with larger samples receiving greater weight), and past reputable polls will be incorporated, giving priority to highly rated pollsters to strengthen the overall analysis.
+
+### Conclusion
+The processes outlined in this survey aim to provide valid and meaningful insights into the upcoming U.S. 2024 Presidential Election. Working within a limited budget, we have carefully designed the survey and data processing methods to achieve reliable and comprehensive analyses, both at the subgroup level and in the overall population. 
+
+Sample survey could find here: 
+[Surey Link ](https://docs.google.com/forms/d/e/1FAIpQLSd_yZTdfVJpPJY0ItPLdJ1xwtL0zQiGmBf8KE_lCJfoy2lJCQ/viewform?usp=sf_link).
+
 
 # Model details {#sec-model-details}
 
@@ -226,15 +281,15 @@ In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. Th
 #| fig-cap: "Examining how the model fits, and is affected by, the data"
 #| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"]
 
-pp_check(first_model) +
-  theme_classic() +
-  theme(legend.position = "bottom")
+#pp_check(first_model) +
+ # theme_classic() +
+  #theme(legend.position = "bottom")
 
-posterior_vs_prior(first_model) +
-  theme_minimal() +
-  scale_color_brewer(palette = "Set1") +
-  theme(legend.position = "bottom") +
-  coord_flip()
+#posterior_vs_prior(first_model) +
+ # theme_minimal() +
+  #scale_color_brewer(palette = "Set1") +
+ # theme(legend.position = "bottom") +
+  #coord_flip()
 ```
 
 ## Diagnostics
