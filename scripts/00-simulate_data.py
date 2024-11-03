@@ -6,10 +6,6 @@
 # License: MIT
 # Pre-requisites: 
   # - `pandas` must be installed (pip install pandas)
-  # - `numpy` must be installed (pip install numpy)
-
-
-#### Workspace setup ####
 import pandas as pd
 import numpy as np
 
