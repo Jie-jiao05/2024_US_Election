@@ -82,7 +82,7 @@ ggplot(state_counts, aes(x = state, y = percentage)) +
   labs(title = "Distribution of Observations by State (Percentage)", x = "State", y = "Percentage") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-The state where the polling took place. This is important for state-level fixed effects, some regions show more supoprt to one party over another. Regarding the data itself, ee notice that over half of all observations are NA, in our analysis we take these to be national level polls. Since this is not explicit in the documentation [@538], this is an assumption which is a caveat in our outcome analysis. We notice in the figure (@state_dist) that not every state is represented, which limits us to the states we can make state-level predictions for.
+The state where the polling took place. This is important for state-level fixed effects, some regions show more support to one party over another. Regarding the data itself, we notice that over half of all observations are NA, in our analysis we take these to be national level polls. Since this is not explicit in the documentation [@538], this is an assumption which is a caveat in our outcome analysis. We notice in the figure (@state_dist) that not every state is represented, which limits us to the states we can make state-level predictions for.
 
 ## Predictor Variable: Party
 The party variable identifies whether the observation is for the Democratic
@@ -138,7 +138,7 @@ do not expect this effect to be strong since we limit ourselves to the highest g
 we retain this vairbale for completeness. Additionaly we notice one of the remaining pollsters
 'YouGov/Center for Working Class Politics' has very few observations and we drop this because it is not well represented in the regression. The polls are from a collaboration with YouGov and a different entity [@YG_CWC] and so we see it as distinct form a YouGov poll and do not merge the two.
 
-##Outcome Variable: pct
+## Outcome Variable: pct
 
 Pct represents percentage of support, the percentage of respondents that support each party. This is our primary outcome of interest, and will be the target of our regression. To note is that for a particular poll the sum of our pct does not add up to 100. Since we drop 
 other parties, they are not represented in our data and their omission causes the sum to not be 100.
@@ -414,9 +414,9 @@ ggplot(combined_data, aes(x = end_date_num, y = pct, color = party)) +
 
 - **Trend for Republican Party**: For the Republican Party, the trend line indicates more variability in their support, but a more increasing trend in the most recent past.
 
-- **Comparative Insights**: By comparing the two we find that the Democrats are in the lead but not by a significant margin, and that the Republicans are showing some recent momentum. However, the credibility intervals are so large, they overlap. As such, there is no significant conclusion. Within the credibility intervals are scenarios where the Republicans lose with 42% and the Democrats win with 52%, as well as scenarios where the Republicans win with 51% and the Democrats lose with 42%.
+- **Comparative Insights**: By comparing the two we find that the Democrats are in the lead but not by a significant margin, and that the Republicans are showing some recent momentum. However, the credibility intervals are so large, they overlap. As such, there is no statistically significant conclusion. Within the credibility intervals are scenarios where the Republicans lose with 42% and the Democrats win with 52%, as well as scenarios where the Republicans win with 51% and the Democrats lose with 42%.
 
-## Posterior predictive check
+## Posterior Predictive check
 
 In @combined_pp_check we implement a posterior predictive check. Our prior belief is a normal distribution around 50, and our posterior shows how much that has been updated by the data. 
 
@@ -463,12 +463,12 @@ A model summary for the Republican and Democrat fits can be found in the Appendi
 
 ## Discussion of Empirical Results {#sec-first-point}
 
-Our results section allows us to make some inferences. First, we see that the Democrats are ahead, and we predict a win for Kamala Harris. However, the time series of the spline shows us that their support has been flat over time, whereas the Republican party has been showing some recent momentum which could contribute to a surprise. This is in-line with some of the literatue, with @cohn_2024 showing how Trump brings his strength later in the election cycle as voters are generally shy to show their support for him.
+Our results section allows us to make some inferences. First, we see that the Democrats are ahead, and we predict a win for Kamala Harris. However, the time series of the spline shows us that their support has been flat over time, whereas the Republican party has been showing some recent momentum which could contribute to a surprise. This is in-line with some of the literature, with @cohn_2024 showing how Trump brings his strength later in the election cycle as voters are generally shy to show their support for him.
 
 Our posterior checks show the variability in our uncertainty. Since we do not have normal posteriors, we can make nuanced inferences on the confidences of our prediction. The Democrats do have a higher projected voter support, but the distribution from which this came has a fatter tail on the left, and drops sharply above 49%. Which means the mean is high, but there is a substantial portion of the distribution that is in a lower voter support percentage. Additionally, if we look at the Republican posterior, it has a sharp spike near its mean, which means it is likely that they will get the losing voter support of 45%, but,
 it has a fat tail that shows that there is an unlikely but possible outcome that they win with a surprise.
 
-We can conclude, that the democrats are strongly favoured to win, but the Republicans do also have a stronger probability of an upward surprise, whereas the democrats have a stronger probabiltiy of a downward surprise.
+We can conclude, that the democrats are strongly favored to win, but the Republicans do also have a stronger probability of an upward surprise, whereas the democrats have a stronger probability of a downward surprise.
 
 ## Limitations and Weaknesses
 
@@ -560,7 +560,7 @@ This survey will conduct recruiting in following methods:
 - **In person recruitment**: A tent will be set up in key high-traffic regions in swing states to conduct survey in-person.
 - **Gift incentive**: To increase participation, all respondents will receive a specially designed pin, estimated to cost around $2 each. This incentive is intended to boost engagement and encourage broader participation in the survey.
 
-### Budgect Allocation
+### Budget Allocation
 
 - **Online Recruitment Cost**:   $20,000 allocated for advertising across various platforms (search engines and social media).
 - **Phone Recruitment Cost**: $20,000 allocated for hiring staff to conduct phone surveys and cover the associated data usage charges.
