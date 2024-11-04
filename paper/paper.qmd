@@ -256,12 +256,75 @@ To ensure data we collected are valid and significant, we will conduct following
 - **Stratified Analysis**: To gain insights into voter preferences within different demographic subgroups, stratified analyses will be conducted, focusing both on overall trends and trends within specific subgroups.
 - **Poll Aggregation Approach**: The aggregated data will be weighted based on sample size (with larger samples receiving greater weight), and past reputable polls will be incorporated, giving priority to highly rated pollsters to strengthen the overall analysis.
 
+### Sample Survey
+Google Forms will be used to collect data efficiently and securely, ensuring no information is leaked. The survey will cover aspects such as gender, race, demographics, education, first-choice candidate, and views on the current United States.
+
+A complete sample survey could be found in the following link https://forms.gle/1jrQP7bPqntJ9N2s9 or by clicking [Sample survey ](https://docs.google.com/forms/d/e/1FAIpQLSd_yZTdfVJpPJY0ItPLdJ1xwtL0zQiGmBf8KE_lCJfoy2lJCQ/viewform?usp=sf_link).
+
+Proposed Survey Questions:
+
+1. What sex were you assigned at birth, or on your original birth certificate?
+- Male
+- Female
+
+2. How do you currently describe your gender?
+- Male
+- Female
+- Transgender
+- Non-binary
+- other
+
+3. What is your racial self-identification?
+- White
+- Black
+- Asian
+- Indigenous
+- Prefer not to say
+- Other
+
+4. What is your current age?
+- Under 18
+- 30-45
+- 46-51
+- 52-66
+- over 66
+
+5. What is your highest level of education?
+- High school or Under
+- Undergraduate
+- Graduate
+_ Doctor
+
+6. Which  candidate would you vote for in U.S. 2024 Presidential Election?
+- Donald Trump (Republic)
+- Kamala Harris (Democrat)
+- Other
+
+7. Would you vote for the 2024 U.S. Presidential Election?
+- Yes
+- No
+- I'm not sure
+
+8. Are you satisfied with the current situation in the United States?
+- Pretty much
+- Somewhat satisfied
+- Neutral
+- Somewhat dissatisfied
+- Very Dissatisfied
+- No opinion
+
+9. What is your most concerned toward to current U.S?
+- Economy
+- Employment
+- Education
+- Environment
+- Diplomacy
+- Immigration
+- Domestic safety
+
+
 ### Conclusion
 The processes outlined in this survey aim to provide valid and meaningful insights into the upcoming U.S. 2024 Presidential Election. Working within a limited budget, we have carefully designed the survey and data processing methods to achieve reliable and comprehensive analyses, both at the subgroup level and in the overall population. 
-
-Sample survey could find here: 
-[Surey Link ](https://docs.google.com/forms/d/e/1FAIpQLSd_yZTdfVJpPJY0ItPLdJ1xwtL0zQiGmBf8KE_lCJfoy2lJCQ/viewform?usp=sf_link).
-
 
 # Model details {#sec-model-details}
 
