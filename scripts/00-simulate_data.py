@@ -38,4 +38,4 @@ if __name__ == "__main__":
     }
     #### Save data ####
     df = pd.DataFrame(data)
-    df.to_parquet("../data/00-simulated_data.parquet", index=False)
+    df.to_parquet("../data/00-simulated_data/simulated_poll_data.parquet", index=False)
