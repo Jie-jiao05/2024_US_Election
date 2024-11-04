@@ -8,7 +8,7 @@ author:
 thanks: "Code and data are available at: [https://github.com/Jie-jiao05/2024_US_Election.git)."
 date: today
 date-format: long
-abstract: "The 2024 U.S. Presidential Election, set against a backdrop of economic and political challenges, features Donald Trump and Kamala Harris as the main candidates. This study uses Bayesian spline regression on polling data from FiveThirtyEight to predict the election outcome, capturing dynamic voter trends over time. Our analysis suggests a likely win for Kamala Harris. Given the U.S.’s global influence, this result could significantly impact international security, trade, geopolitics, and provide a clear insight of forthcoming policy directions."
+abstract: "The 2024 U.S. Presidential Election, set against a backdrop of economic and political challenges, features Donald Trump and Kamala Harris as the main candidates. This study uses Bayesian spline regression on polling data from FiveThirtyEight to predict the election outcome, capturing dynamic voter trends over time. Our analysis suggests a likely win for Kamala Harris, however a possible surprise by Donald Trump. Given the U.S.’s global influence, this result could significantly impact international security, trade, geopolitics, and provide a clear insight of forthcoming policy directions."
 format: pdf
 toc: true
 number-sections: true
@@ -20,14 +20,22 @@ bibliography: references.bib
 #| warning: false
 #| message: false
 
+library(knitr)
 library(tidyverse)
-library(palmerpenguins)
+library(arrow)
+library(modelsummary)
+library(rstanarm)
+library(splines)
+raw_data <- read_csv(here::here('data/01-raw_data/raw_data.csv'))
+analysis_data <- read_parquet(here::here('data/02-analysis_data/analysis_data.parquet'))
+analysis_data$end_date <- as.Date(analysis_data$end_date, format = "%m/%d/%y")
+raw_data$end_date <- as.Date(raw_data$end_date, format = "%m/%d/%y")
 ```
 
 
 # Introduction
 
-The United States, as the world’s largest economy and most influential country, will hold its presidential election on November 5, 2024. Despite facing domestic challenges such as inflation, low employment rates after the pandemic, and increasing political polarization due to conflicts between the Democratic and Republican parties, which have accelerated internal tensions.As of October 2024, former President Donald Trump has secured the Republican Party nomination. However, after assassination happened on July 14, 2024, many of his supporters have become even more committed to his legacy. Meanwhile, President Joe Biden withdrew from the election on July 21, leading to the nomination of Kamala Harris as the Democratic candidate. These events have made the 2024 U.S. election increasingly complex and unpredictable, further intensifying uncertainty about the future.
+The United States, as the world’s largest economy and most influential country, will hold its presidential election on November 5, 2024. Despite facing domestic challenges such as inflation, low employment rates after the pandemic, and increasing political polarization due to conflicts between the Democratic and Republican parties, which have accelerated internal tensions.As of October 2024, former President Donald Trump has secured the Republican Party nomination. Meanwhile, President Joe Biden withdrew from the election on July 21, leading to the nomination of Kamala Harris as the Democratic candidate. These events have made the 2024 U.S. election increasingly complex and unpredictable, further intensifying uncertainty about the future.
 
 The estimand of this study is the predicted outcome of the 2024 U.S. Presidential Election for either Donald Trump or Kamala Harris, based on aggregated polling averages. Our analysis employs Bayesian spline regression to effectively capture the dynamic changes in voting trends over time, allowing us to forecast the likely election result. By comparing the predicted probabilities for both candidates, we aim to identify the probable winner based on current trends in voter support.
 
@@ -35,152 +43,430 @@ Using Bayesian spline regression analysis on the dataset provided by FiveThirtyE
 
 Due to the United States' hegemonic position and unparalleled global influence, the outcome of the U.S. election will serve as a guiding light for global developments over the next four years, significantly impacting international security, trade, cooperation, and geopolitics. This article aims to provide a clearer analytical framework for political scientists, the general public, journalists, corporate strategists, and anyone globally concerned with the U.S. election.
 
-The remainder of this paper is structured as follows. @sec-data we will discuss the MLR used in the prediction and the result of the MLR with its predictor variables and the response after transformation. @sec-dis the shortcomings of the study and areas for improvement will be described. @sec-Appendix-A A Deep Dive to a pollster will be conducted, and @sec-Appendix-B We will given a idealized survey and methodology
-
-
-
+The remainder of this paper is structured as follows. @sec-data we will discuss the data used in the modelling process and the result of the Bayesian Spline fit with its predictor variables and the response after transformation. @sec-dis the shortcomings of the study and areas for improvement will be described. @sec-Appendix-A A Deep Dive to a pollster will be conducted, and @sec-Appendix-B We will given a idealized survey and methodology
 
 # Data {#sec-data}
 
 ## Overview
 
-We use the statistical programming language R [@citeR] to analysis the data which are extracted from the 2024 U.S. General President Election collected and published by FiveThirtyEight  [@FiveThirtyEight]. This paper will conduct a Multiple Linear Regression to do further prediction. In this model, we take numeric_grade, pollscore, sample_size as predictors, and pct as response. 
+We use R [@citeR] and Python [@citePython] to analyze a panel of poll data from Project FiveThirtyEight [@538]. It consists of voter support data from major pollsters in the US, with national and state-level polls. The data includes labels for pollster robustness as constructed by FiveThirtyEight. Polling date data is included, which gives us snapshots of the progressing state of the general election.
 
-## Data Cleaning
+Our analysis is focused on determining whether Donald Trump or Kamala Harris will win the election. We drop all other candidates and parties on the belief that they are not likely to win given how close the race is between the two leading candidates.
 
-To Simplify the dataset we extract the data of the pollater_id, pollster, methodology,  numeric_grade, pollscore, sample_size, pct, and transform Party and Answer into categorical (0=DEM, 1=REP and 0 = Harris, 1=Trump). In oreder to make the pollster more reliable we will only analysis that transparency are over 3  to increase the liability of this survey.
-
-Overview text
+For every observation in our data we have percentage of voter support, state, start and end dates of the poll, pollster quality, and party.
 
 ## Measurement
 	
 Some paragraphs about how we go from a phenomena in the world to an entry in the dataset.
 
-## Outcome variables
-
-Add graphs, tables and text. Use sub-sub-headings for each outcome variable or update the subheading to be singular.
-
-
-
-Some of our data is of penguins (@fig-bills), from @palmerpenguins.
-
+## Data Quality Variable: Numeric_Grade
 ```{r}
-#| label: fig-bills
-#| fig-cap: Bills of penguins
-#| echo: false
-
-ggplot(penguins, aes(x = island, fill = species)) +
-  geom_bar(alpha = 0.8) +
-  scale_fill_manual(values = c("darkorange","purple","cyan4"),
-                    guide = "none") +
-  theme_minimal() +
-  facet_wrap(~species, ncol = 1) +
-  coord_flip()
-```
-
-Talk more about it.
-
-And also planes (@fig-planes). (You can change the height and width, but don't worry about doing that until you have finished every other aspect of the paper - Quarto will try to make it look nice and the defaults usually work well once you have enough text.)
-
-```{r}
-#| label: fig-planes
-#| fig-cap: Relationship between wing length and width
-#| echo: false
+#| label: numeric_grade_dist
+#| fig-cap: Distribution of Numeric Grades
 #| warning: false
-#| message: false
-
-#analysis_data <- read_csv(here::here("data/02-analysis_data/analysis_data.csv"))
-
-#analysis_data |> 
-#  ggplot(aes(x = width, y = length)) +
- # geom_point(alpha = 0.8) +
-  #theme_minimal() +
-  #labs(x = "Wing width (mm)",
-   #    y = "Wing length (mm)")
+#| echo: false
+ggplot(raw_data, aes(x = numeric_grade)) +
+  geom_histogram(binwidth = 0.1, color = "black", fill = "lightblue") +
+  labs(title = "Distribution of Numeric Grades", x = "Numeric Grade", y = "Frequency")
 ```
 
-Talk way more about it. 
+Numeric_Grade is a numeric rating given by FiveThirtyEight to indicate a pollsters quality or reliability. The rating is based on methodology, transparency and historical accuracy which is important for our analysis as we evaluate eahc poll observation. The raw data set has the following distribution with numeric grades (@numeric_grade_dist). We choose to drop all polls with numeric grades less than 3 to keep only the highest quality polls.
 
-## Predictor variables
+## Predictor Variable: State
+```{r}
+#| label: state_dist
+#| fig-cap: Distribution of Observations by State
+#| echo: false
+analysis_data$state[is.na(analysis_data$state)] <- "National"
+state_counts <- analysis_data %>%
+  count(state) %>%
+  mutate(percentage = n / sum(n) * 100)
+ggplot(state_counts, aes(x = state, y = percentage)) +
+  geom_bar(stat = "identity", color = "black", fill = "lightblue") +
+  labs(title = "Distribution of Observations by State (Percentage)", x = "State", y = "Percentage") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+The state where the polling took place. This is important for state-level fixed effects, some regions show more supoprt to one party over another. Regarding the data itself, ee notice that over half of all observations are NA, in our analysis we take these to be national level polls. Since this is not explicit in the documentation [@538], this is an assumption which is a caveat in our outcome analysis. We notice in the figure (@state_dist) that not every state is represented, which limits us to the states we can make state-level predictions for.
 
-Add graphs, tables and text.
+## Predictor Variable: Party
+The party variable identifies whether the observation is for the Democratic
+or Republican party. What we are interested in is the most-likely presidential candidate
+so we remove any data before Kamala Harris was announced on July 21 2024, which allows us to use party as a proxy for candidate.
+```{r}
+#| label: party_counts
+#| fig-cap: Distribution of Observations by Party
+#| echo: false
+party_counts <- analysis_data %>%
+  count(party)
 
-Use sub-sub-headings for each outcome variable and feel free to combine a few into one if they go together naturally.
+# Display the table
+kable(party_counts, caption = "Distribution of Observations by Party")
+```
+## Predictor Variable: end_date_num
+End_date is the end date of the poll and represents the informational cut off date that
+the results of a poll indicate. We include this as one of the variables in our regression
+in order to capture time effects such as the momentum and changing support of a candidate over time. End_date_num is the number of days since the start of the period, it increases as we approach the election period. We include it to measure the time effects, we might expect Trump's roportion to increase as end_date_num increases as we have seen historically due to shy voters @cohn_2024.
 
+Plotting a histogram of end dates, we see how polls become much more frequent over time as the election approaches. 
 
+```{r}
+#| label: end_date_history
+#| fig-cap: Number of Polls over Time
+#| echo: false
+poll_counts <- raw_data %>%
+  mutate(month = floor_date(end_date, "month")) %>%
+  count(month)
 
+# Plot the number of polls over time, by month using bars
+ggplot(poll_counts, aes(x = month, y = n)) +
+  geom_bar(stat = "identity", fill = "skyblue", color = "black") +
+  labs(title = "Number of Polls over Time (Monthly)", x = "Month", y = "Frequency") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+## Predictor Variable: pollster
+```{r}
+#| label: pollster_counts
+#| fig-cap: High-Grade Poll counts by Pollster
+#| echo: false
+pollster_counts <- analysis_data %>%
+  count(pollster)
 
+# Display the table
+kable(pollster_counts, caption = "High-Grade Poll counts by Pollster" )
+```
+Pollsters are the agencies that do the polls, in our datasetwe find only a few pollsters
+remain as seen below. We include pollsters in our regression to account for any pollster
+effects, bias can come from the pollsters themselves, or the demographics they serve. While we
+do not expect this effect to be strong since we limit ourselves to the highest grade of polls
+we retain this vairbale for completeness. Additionaly we notice one of the remaining pollsters
+'YouGov/Center for Working Class Politics' has very few observations and we drop this because it is not well represented in the regression. The polls are from a collaboration with YouGov and a different entity [@YG_CWC] and so we see it as distinct form a YouGov poll and do not merge the two.
 
+##Outcome Variable: pct
 
+Pct represents percentage of support, the percentage of respondents that support each party. This is our primary outcome of interest, and will be the target of our regression. To note is that for a particular poll the sum of our pct does not add up to 100. Since we drop 
+other parties, they are not represented in our data and their omission causes the sum to not be 100.
 
+```{r}
+#| label: pct
+#| echo: false
+#| fig-cap: "Distribution of Percentage support shows us how each party's support is distributed around 46%, showcasing the close nature of the election"
+# Create frequency table of pct values by party
+freq_data <- analysis_data %>%
+  filter(party %in% c("REP",  "DEM")) %>%
+  mutate(pct_bin = cut(pct, breaks = seq(0, 100, by = 0.01))) %>%  # Bin pct into intervals of 5
+  group_by(party, pct_bin) %>%
+  summarise(freq = n(), .groups = 'drop')
+
+# Generate the dodge plot for binned pct distribution by party with custom colors
+ggplot(freq_data, aes(x = pct_bin, y = freq, fill = party)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  labs(title = "Distribution of Percentage Support by Party (Binned)",
+       x = "Percentage Support (pct) Binned",
+       y = "Frequency") +
+  theme_minimal() +
+  scale_fill_manual(values = c("REP" = "red", "DEM" = "blue")) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
+```
 
 # Model
 
-The goal of our modelling strategy is twofold. Firstly,...
+Our model is designed to estimate temporal trends in party support as reflected in polling percentages for the Democratic and Republican parties. We employ a Bayesian framework to capture uncertainty and provide flexibility in trend estimation over time. Based on our understanding of state-level variances @538, and possible pollster bias, we include them as variables.
 
-Here we briefly describe the Bayesian analysis model used to investigate... Background details and diagnostics are included in [Appendix -@sec-model-details].
+## Model Set-up
 
-## Model set-up
+The response variable \( y_i\) represents the percentage voter support for a given poll \(i\). The explanatory variables:
+- \(\text{end\_date\_num}_i\): the number of days since the earliest poll date for the given party,
+- \( \text{pollster}_i \): the pollster conducting the poll, and
+- \( \text{state}_i \): the U.S. state where the poll was conducted (or "National" if the poll was nationwide).
 
-Define $y_i$ as the number of seconds that the plane remained aloft. Then $\beta_i$ is the wing width and $\gamma_i$ is the wing length, both measured in millimeters.  
+For each party, we fit a separate Bayesian model with spline smoothing on \( \text{end\_date\_num}\) to capture time trends, alongside fixed effects for both pollster and state. We implement the model in R using the `rstanarm` package [@citeR].
 
-\begin{align} 
-y_i|\mu_i, \sigma &\sim \mbox{Normal}(\mu_i, \sigma) \\
-\mu_i &= \alpha + \beta_i + \gamma_i\\
-\alpha &\sim \mbox{Normal}(0, 2.5) \\
-\beta &\sim \mbox{Normal}(0, 2.5) \\
-\gamma &\sim \mbox{Normal}(0, 2.5) \\
-\sigma &\sim \mbox{Exponential}(1)
+The model’s hierarchical structure and notation are as follows:
+
+\[
+\begin{align}
+y_i | \mu_i, \sigma &\sim \text{Normal}(\mu_i, \sigma) \\
+\mu_i &= \alpha + f(\text{end\_date\_num}_i) + \text{pollster}_i + \text{state}_i \\
+\alpha &\sim \text{Normal}(50, 10) \\
+f(\text{end\_date\_num}) &\sim \text{B-spline basis expansion} \\
+\text{pollster}_i &\sim \text{Normal}(0, 5) \\
+\text{state}_i &\sim \text{Normal}(0, 3) \\
+\sigma &\sim \text{Exponential}(1)
 \end{align}
+\]
 
-We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use the default priors from `rstanarm`.
+### Explanation of Components
 
+- **Response variable \( y_i\)**: Observed polling voter support percentage for each poll \(i\). This represents the percentage of voter support.
 
-### Model justification
+- **Mean structure \(\mu_i \)**: Consists of four components:
+  - **Intercept \( \alpha \)**: Represents the baseline average percentage across all polls.
+  - **Spline component \( f(\text{end\_date\_num}_i) \)**: Captures temporal trends in polling percentages over time, modeled using a B-spline basis expansion. This allows the trend to adjust flexibly over time, fitting the non-linear trends typically observed in polling data.
+  
+  - **Pollster effect \( \text{pollster}_i \)**: A fixed effect to account for systematic differences across pollsters. Due to varying methodologies and sampling practices, some pollsters may produce consistently higher or lower estimates.
+  
+  - **State effect \( \text{state}_i \)**: A fixed effect accounting for differences across states. Given the diversity in political landscapes across U.S. states, this term allows for state-specific adjustments, capturing the influence of state-level variability on polling trends. For example, large or politically heterogeneous states may exhibit unique polling behaviors that could impact results.
 
-We expect a positive relationship between the size of the wings and time spent aloft. In particular...
+### Priors
+- **Intercept \(\alpha \sim \text{Normal}(50, 10) \)**: Centered around 50%, allowing flexibility given historical polling percentages range from 0% to 100%.
+- **Pollster effect prior \( \text{Normal}(0, 5) \)**: This moderate prior accounts for typical systematic differences by pollster, usually less than 5% on average.
+- **State effect prior \( \text{Normal}(0, 3) \)**: Reflects an expected range of moderate variation across states, accounting for demographic or political differences that may influence polling results.
+- **Spline basis priors**: Each spline coefficient has a `Normal(0, 5)` prior, allowing moderate variation in temporal trends without overfitting.
+- **Error term \(\sigma \sim \text{Exponential}(1) \)**: This prior allows positive values with most mass around lower standard deviations, yet still accommodates higher values in the presence of greater noise.
 
-We can use maths by including latex between dollar signs, for instance $\theta$.
+### Model Implementation
+The model is implemented with `rstanarm` and `stan_glm`, @rstanarm with spline terms on \(\text{end\_date\_num}\) and fixed effects for both pollster and state. This structure enables us to capture time trends while also adjusting for pollster and state-level variability. The Bayesian framework in `rstanarm` allows us to derive credible intervals around predictions, aligning with our focus on uncertainty quantification.
 
+### Diagnostics and Validation
+Model diagnostics are crucial to ensure reliability and robustness:
+- **Posterior Predictive Checks**: We use `pp_check` functions to visually compare observed and model-predicted polling percentages. These checks help assess whether the model captures the data patterns effectively. And gives us an interpretable belief system.
+- **Convergence Diagnostics**: R-hat values close to 1 and trace plots are manually inspected to confirm the convergence of the Markov Chain Monte Carlo (MCMC) sampling.
+- **Sensitivity Analysis**: We tested several values for the spline degrees of freedom (`df = 4` was chosen) to avoid overfitting.
+- **Out-of-Sample Validation**: Future work will include a test-train split for validating predictions on unseen data, using metrics like Root Mean Square Error (RMSE) and Mean Absolute Error (MAE) to assess predictive performance.
+
+### Alternative Models Considered
+We considered the following alternatives:
+1. **Non-Spline Linear Trend Model**: A simpler model assuming a linear trend in \( \text{end\_date\_num} \). However, this approach did not capture the observed non-linear trends over time.
+2. **Pollster Only Model (without State Effects)**: A model without state effects was tested, but we felt that fundamentally state effects are important and should be included
+
+The selected model—using a spline with both pollster and state fixed effects—was chosen for its ability to balance flexibility with robustness, capturing essential polling trends without excessive complexity.
+
+### Assumptions and Limitations
+This model assumes that polling trends over time follow a relatively smooth pattern and that pollster and state effects are additive and consistent over time. We note that interactions between states, their co movement with each other @538 are not included, and that this is 
+a simplistic model.
 
 # Results
 
-Our results are summarized in @tbl-modelresults.
+Here we present the results of our analysis of the election cycle. First we look at a cross-sectional summary of the
+landscape, state-wise polling averages of each party. Then we look at the prediction from our regression of the possible outcomes and evaluate whether the Democrats or Republicans have a higher voter support percentage as per our Bayesian model. We finally look at the posterior beliefs generated by our model and use them to make a conclusion on election outcomes.
+
+
+@cross_summary_stats shows us the cross sectional stats for the polling data.
+We determine that on average across all time, the Democrats under Harris have a marginal lead.
+However, given that these polls have confidence intervals of 3% on average, this is well within a margin of error.
 
 ```{r}
+#| label: cross_summary_stats
 #| echo: false
-#| eval: true
 #| warning: false
-#| message: false
+library(dplyr)
+library(knitr)
 
-library(rstanarm)
+summary_stats <- analysis_data %>%
+  summarise(
+    avg_pct_dem = round(mean(pct[party == "DEM"], na.rm = TRUE), 3),
+    avg_pct_rep = round(mean(pct[party == "REP"], na.rm = TRUE), 3),
+    min_pct_dem = round(min(pct[party == "DEM"], na.rm = TRUE), 3),
+    max_pct_dem = round(max(pct[party == "DEM"], na.rm = TRUE), 3),
+    min_pct_rep = round(min(pct[party == "REP"], na.rm = TRUE), 3),
+    max_pct_rep = round(max(pct[party == "REP"], na.rm = TRUE), 3),
+    poll_count = n(),
+    min_date = min(end_date, na.rm = TRUE),
+    max_date = max(end_date, na.rm = TRUE)
+  )
 
-first_model <-
-  readRDS(file = here::here("models/first_model.rds"))
+# Display the table with improved formatting
+summary_stats %>%
+  kable(
+    caption = "Summary Statistics of Polling Data",
+    col.names = c(
+      "Avg % DEM", "Avg % REP", "Min % DEM", "Max % DEM",
+      "Min % REP", "Max % REP", "Poll Count", "Earliest Date", "Latest Date"
+    ),
+    format = "pipe"
+  )
+
 ```
 
-```{r}
-#| echo: false
-#| eval: true
-#| label: tbl-modelresults
-#| tbl-cap: "Explanatory models of flight time based on wing width and wing length"
-#| warning: false
+## National Polling Trends for Democratic and Republican Parties
+First we observe the results from the 'National' state, which are the polls with no state label, that we assumed
+to be national polls. Our Bayesian spline model allows us to examine trends and quantify the uncertainty.
 
-modelsummary::modelsummary(
-  list(
-    "First model" = first_model
+```{r}
+#| label: bayesian_outcome_stats
+#| echo: false
+#| warning: false
+data <- read_parquet(here::here("data/02-analysis_data/analysis_data.parquet"))
+
+# Separate data by party, handle missing states, and calculate num_dem and num_rep
+dem_data <- data |>
+  filter(party == "DEM") |>
+  mutate(
+    state = if_else(is.na(state), "National", state),
+    end_date = mdy(end_date),
+    num_dem = round((pct / 100) * sample_size, 0)
+  )
+
+rep_data <- data |>
+  filter(party == "REP") |>
+  mutate(
+    state = if_else(is.na(state), "National", state),
+    end_date = mdy(end_date),
+    num_rep = round((pct / 100) * sample_size, 0)
+  )
+
+# Convert pollster and state to factors
+dem_data <- dem_data |>
+  mutate(
+    pollster = factor(pollster),
+    state = factor(state)
+  )
+
+rep_data <- rep_data |>
+  mutate(
+    pollster = factor(pollster),
+    state = factor(state)
+  )
+
+# Convert end_date to number of days since the earliest poll
+dem_data <- dem_data |>
+  mutate(
+    end_date_num = as.numeric(end_date - min(end_date))
+  )
+
+rep_data <- rep_data |>
+  mutate(
+    end_date_num = as.numeric(end_date - min(end_date))
+  )
+
+# Create new data for prediction, including state
+new_data <- data.frame(
+  end_date_num = seq(
+    min(dem_data$end_date_num),
+    max(dem_data$end_date_num),
+    length.out = 100
   ),
-  statistic = "mad",
-  fmt = 2
+  pollster = factor("YouGov", levels = levels(dem_data$pollster)),
+  state = factor("National", levels = levels(dem_data$state))
 )
+rep_new_data <- data.frame(
+  end_date_num = seq(
+    min(rep_data$end_date_num),
+    max(rep_data$end_date_num),
+    length.out = 100
+  ),
+  pollster = factor("YouGov", levels = levels(rep_data$pollster)),
+  state = factor("National", levels = levels(rep_data$state))
+)
+
+spline_model <- readRDS(here::here("models/democrat_model.rds"))
+rep_spline_model<- readRDS(here::here("models/republican_model.rds"))
+
+# Predict posterior draws
+posterior_preds <- posterior_predict(spline_model, newdata = new_data)
+rep_posterior_preds <- posterior_predict(rep_spline_model, newdata = rep_new_data)
+
+# Summarize predictions
+pred_summary <- new_data |>
+  mutate(
+    pred_mean = colMeans(posterior_preds),
+    pred_lower = apply(posterior_preds, 2, quantile, probs = 0.025),
+    pred_upper = apply(posterior_preds, 2, quantile, probs = 0.975)
+  )
+
+rep_pred_summary <- rep_new_data |>
+  mutate(
+    pred_mean = colMeans(rep_posterior_preds),
+    pred_lower = apply(rep_posterior_preds, 2, quantile, probs = 0.025),
+    pred_upper = apply(rep_posterior_preds, 2, quantile, probs = 0.975)
+  )
+
+# Rename columns to standardize
+colnames(dem_data)[colnames(dem_data) == "num_dem"] <- "num"
+colnames(rep_data)[colnames(rep_data) == "num_rep"] <- "num"
+
+# Combine data and prediction summaries for final plot
+combined_data <- rbind(dem_data, rep_data)
+pred_summary$party <- "DEM"
+rep_pred_summary$party <- "REP"
+pred_summary_combined <- rbind(pred_summary, rep_pred_summary)
+
+# Final combined plot with state effects
+ggplot(combined_data, aes(x = end_date_num, y = pct, color = party)) +
+  geom_point(aes(shape = pollster)) +
+  geom_line(
+    data = pred_summary_combined,
+    aes(x = end_date_num, y = pred_mean, color = party),
+    inherit.aes = FALSE
+  ) +
+  geom_ribbon(
+    data = pred_summary_combined,
+    aes(x = end_date_num, ymin = pred_lower, ymax = pred_upper, fill = party),
+    alpha = 0.2,
+    inherit.aes = FALSE
+  ) +
+  labs(
+    x = "Days since earliest poll",
+    y = "Percentage",
+    title = "National Poll Percentage over Time with Spline Fit"
+  ) +
+  scale_color_manual(values = c("blue", "red")) +
+  scale_fill_manual(values = c("blue", "red")) +
+  theme_minimal()
 ```
 
+### Bayesian Spline Model
 
+- **Smoothed Prediction Line**: The Bayesian spline model generates the smoothed trend line (blue for Democrats and red for Republicans) on the plot. This line represents the posterior mean, the expected polling percentage over time after accounting for individual poll variability.
+  
+- **Uncertainty Interval**: The shaded area around each trend line represents the 95% credible interval derived from the Bayesian model’s posterior predictions. This interval provides a measure of uncertainty, highlighting where actual polling values are likely to fall based on the model’s posterior distribution.
 
+### Key Observations
 
-# Discussion
+- **Trend for Democratic Party**: The smoothed trend line for the Democratic Party shows that support for the Democrats has been stable and above that of the Republicans.
 
-## First discussion point {#sec-first-point}
+- **Trend for Republican Party**: For the Republican Party, the trend line indicates more variability in their support, but a more increasing trend in the most recent past.
+
+- **Comparative Insights**: By comparing the two we find that the Democrats are in the lead but not by a significant margin, and that the Republicans are showing some recent momentum. However, the credibility intervals are so large, they overlap. As such, there is no significant conclusion. Within the credibility intervals are scenarios where the Republicans lose with 42% and the Democrats win with 52%, as well as scenarios where the Republicans win with 51% and the Democrats lose with 42%.
+
+## Posterior predictive check
+
+In @combined_pp_check we implement a posterior predictive check. Our prior belief is a normal distribution around 50, and our posterior shows how much that has been updated by the data. 
+
+We find that the democrat posterior forms a table with a fatter tail below 50, indicating that the uncertainty is more on the lower side, our confidence in the voter support estimate is not strongly concentrated around a single mean value, but decays to the left.
+
+The inverse is true for the Republican posterior where the spike is lower, indicating a higher confidence in their possible voter support,
+but a fatter right tail, indicating a higher surprise probability.
+
+```{r} 
+#| label: combined_pp_check
+#| echo: false
+#| warning: false
+#| layout-ncol: 2
+#| fig-cap: "Comparison of Posterior Predictive Checks: Democrats vs Republicans Models. The Democrat model shows a fat tail below 50, suggesting higher probability of downward surprises. The Republican model has a fatter right tail, indicating a higher probability of upward surprises."
+
+# Democrats model
+plot1 <- pp_check(spline_model) +
+  theme_classic() +
+  labs(
+    title = "Democrats Model",
+    subtitle = "Fatter tail below 50 suggests higher chance of downward surprises",
+    x = "Predicted Outcome",
+    y = "Density"
+  ) +
+  theme(legend.position = "bottom")
+
+# Republicans model
+plot2 <- pp_check(rep_spline_model) +
+  theme_classic() +
+  labs(
+    title = "Republicans Model",
+    subtitle = "Fatter tail above 50 suggests higher chance of upward surprises",
+    x = "Predicted Outcome",
+    y = "Density"
+  ) +
+  theme(legend.position = "bottom")
+
+# Display plots side-by-side in R Markdown
+plot1
+plot2
+```
+A model summary for the Republican and Democrat fits can be found in the Appendix @sec-model-details.
+
+# Discussion {#sec-dis}
+
+## Discussion of {#sec-first-point}
 
 If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
 
@@ -371,53 +657,35 @@ _ Doctor
 The processes outlined in this survey aim to provide valid and meaningful insights into the upcoming U.S. 2024 Presidential Election. Working within a limited budget, we have carefully designed the survey and data processing methods to achieve reliable and comprehensive analyses, both at the subgroup level and in the overall population. 
 
 # Model details {#sec-model-details}
-
-## Posterior predictive check
-
-In @fig-ppcheckandposteriorvsprior-1 we implement a posterior predictive check. This shows...
-
-In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. This shows... 
+## Model Summmary
+We print the Model Summaries here for reference.
 
 ```{r}
 #| eval: true
 #| echo: false
 #| message: false
 #| warning: false
-#| label: fig-ppcheckandposteriorvsprior
-#| layout-ncol: 2
-#| fig-cap: "Examining how the model fits, and is affected by, the data"
-#| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"]
+#| label: fig-dem_sum
+summary_table <- summary(spline_model)
+summary_table_rounded <- summary_table
+summary_table_rounded[] <- lapply(summary_table_rounded, function(x) if(is.numeric(x)) round(x, 3) else x)
 
-#pp_check(first_model) +
- # theme_classic() +
-  #theme(legend.position = "bottom")
-
-#posterior_vs_prior(first_model) +
- # theme_minimal() +
-  #scale_color_brewer(palette = "Set1") +
- # theme(legend.position = "bottom") +
-  #coord_flip()
+# Display the table with kable
+kable(summary_table_rounded, format = "markdown", caption = "Summary Table For Bayesian Spline fit of Democrat Voter Support")
 ```
 
-## Diagnostics
-
-@fig-stanareyouokay-1 is a trace plot. It shows... This suggests...
-
-@fig-stanareyouokay-2 is a Rhat plot. It shows... This suggests...
-
 ```{r}
-#| echo: false
 #| eval: true
+#| echo: false
 #| message: false
 #| warning: false
-#| label: fig-stanareyouokay
-#| fig-cap: "Checking the convergence of the MCMC algorithm"
-#| fig-subcap: ["Trace plot", "Rhat plot"]
-#| layout-ncol: 2
+#| label: fig-rep_sum
+summary_table <- summary(rep_spline_model)
+summary_table_rounded <- summary_table
+summary_table_rounded[] <- lapply(summary_table_rounded, function(x) if(is.numeric(x)) round(x, 3) else x)
 
-plot(first_model, "trace")
-
-plot(first_model, "rhat")
+# Display the table with kable
+kable(summary_table_rounded, format = "markdown", caption = "Summary Table For Bayesian Spline fit of Republican Voter Support")
 ```
 
 
