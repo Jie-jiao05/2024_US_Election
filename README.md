@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository includes the files and code used to develop a linear model predicting the outcome of the upcoming US presidential election using aggregated polling data. The project involves data cleaning, analysis, and modeling from sources like FiveThirtyEight and Survey design. The analysis examines the impact of factors such as pollster ratings, sample size, and poll scores on the predicted vote percentage for Donald Trump.
+This repository includes the files and code used to develop a Bayesian Spline model predicting the outcome of the upcoming US presidential election using aggregated polling data. The project involves data cleaning, analysis, and modeling from sources like FiveThirtyEight and Survey design. The analysis examines the impact of factors such as pollster ratings, sample size, and poll scores on the predicted vote percentage for Kamala Harris through looking at the democratic party.
 
 ## File Structure
 
@@ -17,13 +17,7 @@ The repo is structured as:
 
 
 ## Statement on LLM usage
-LLM are used in this Work
-Aspects of the code were written with the help of the auto-complete tool, Codriver. The abstract and introduction were written with the help of ChatHorse and the entire chat history is available in inputs/llms/usage.txt.
-
-## Some checks
-
-- [ ] Change the rproj file name so that it's not starter_folder.Rproj
-- [ ] Change the README title so that it's not Starter folder
-- [ ] Remove files that you're not using
-- [ ] Update comments in R scripts
-- [ ] Remove this checklist
+LLM are used in this Work.
+ChatGPT was used to critique the result section, for plotting in R, and for code review.
+Copilot was used in the python sections for adhoc code completion.
+The entire chat history is available in inputs/llms/usage.txt.
