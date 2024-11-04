@@ -208,6 +208,57 @@ Weaknesses and next steps should also be included.
 \appendix
 
 # Appendix 
+## A: Emerson College Polling Methodology Analysis
+
+### Overview
+Emerson College Polling (ECP) is a nationally recognized, non-partisan polling organization [@emerson2024about]. ECP conducted a national survey from October 30 to November 2, 2024, targeting 1,000 likely voters in the 2024 U.S. presidential election. The poll measured voter preferences between candidates Kamala Harris and Donald Trump, indicating a tie at 49% each, with third party candidates and undecided voters at one percent each [@emerson2024november]. Appendix A examines the methodology used by ECP for this poll.
+
+### Survey Population and Sampling
+When conducting a poll, it is crucial to define the target population, sampling frame, and sample in order to provide a clear direction and objective [@whaley2024understanding].
+
+The target population is the entire group about which we aim to understand and draw conclusions from [@tellingstories]. For this poll, the target population consists of likely voters in the 2024 U.S. presidential election. ECP determines likely voters through a combination of voter history, registration status, and self-reported demographic data [@emerson2024november].
+
+Since it is oftentimes infeasible to gather data from the entire target population, sampling frames and samples are utilized. A sampling frame is the list of all units from which samples can be taken [@tellingstories]. In this poll, the sampling frame consists of voters available on Aristotle's database and the online panel provided by CINT [@emerson2024november]. Aristotle maintains comprehensive voter and consumer data [@aristotle2024data], while CINT operates as a global research marketplace connecting researchers to survey respondents [@cint2024]. The sample consists of 1,000 likely voters selected from this frame.
+
+### Data Collection and Sampling Approach
+ECP employs a mixed-mode sampling methodology for its polling [@emerson2024about]. When collecting data for its October 30 to November 2, 2024 U.S. Presidential Election poll, three primary methods were used [@emerson2024november]:
+
+1. MMS-to-web text survey: Respondents receive text messages with custom graphics inviting them to take online Qualtrics survey. Selected randomly from Aristotle voter files.
+2. Online panel surveys: CINT panel respondents screened for voter registration and demographics, then directed to survey with quality checks.
+3. Interactive Voice Response (IVR): Automated calls to landlines where permitted. Respondents use touch-tone phones. Selected randomly from Aristotle voter files.
+
+This mixed-mode approach offers several advantages, primarily reducing coverage bias by reaching different demographic groups within the target population. Coverage bias occurs when there is a discrepancy between the sampling frame and the target population [@stantcheva2023run]. By employing multiple methods, ECP minimizes this bias: MMS-to-web surveys typically capture younger voters, IVR targets older and rural voters who prefer landlines, and online panels engage tech-savvy individuals. A mixed-mode approach can also reduce fieldwork costs by maximizing the use of lower cost methods, and using higher cost methods when necessary [@wilkinson2020mixed]. However, this approach introduces measurement error as each method brings its own biases [@emerson2024about], potentially increasing the overall margin of error.
+
+### Non-response Handling
+In polling, non-response occurs when subjects either refuse to participate in a survey or skip specific questions, limiting the survey's representativeness beyond its respondents. To address this issue and ensure representativeness, ECP implements a weighting system based on multiple demographic variables:
+
+- Gender
+- Education
+- Race
+- Age
+- Party registration
+- Region
+
+These weights are calculated based on 2024 likely voter modeling, adjusting for under- and over-represented groups in the sample [@emerson2024november].
+
+### Questionnaire Design
+The survey's questionnaire demonstrates both strengths and limitations. Its strengths include:
+
+- Clear, unambiguous question formulation
+- Efficient format
+- Topical relevance focusing on vote preferences and key demographic splits
+
+However, the questionnaire's limitations include:
+
+- Limited exploration of underlying voter motivations
+- Potential variation in response quality across different survey modes
+- Basic preference capture without deeper attitudinal investigation
+- All data collection was conducted in English, potentially limiting representation of non-English speaking voters.
+
+The survey maintains a credibility interval of +/- 3 percentage points, with higher intervals for demographic subsets due to reduced sample sizes.
+
+### Conclusion
+Emerson College Polling's mixed-mode methodology effectively balances cost with demographic reach. While their weighting system helps ensure representativeness, the multi-mode approach presents trade-offs: reduced coverage bias through diverse voter outreach, but increased measurement error from combining different survey methods [@mora2011understanding]. These methodological considerations are crucial when interpreting the poll's results.
 
 ## B: Idealized Survey Methodology – $100K Budget
 
