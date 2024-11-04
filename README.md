@@ -21,3 +21,6 @@ LLM are used in this Work.
 ChatGPT was used to critique the result section, for plotting in R, and for code review.
 Copilot was used in the python sections for adhoc code completion.
 The entire chat history is available in inputs/llms/usage.txt.
+
+## Data Reference
+FiveThirtyEight: https://projects.fivethirtyeight.com/polls/president-general/2024/national/
