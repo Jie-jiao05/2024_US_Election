@@ -1,6 +1,6 @@
 ---
-title: "A Prediction of the 2024 U.S. Election"
-subtitle: "Prediction Based on MRP Analysis of Harris Lost"
+title: "A Prediction of the 2024 U.S. Election Outcome "
+subtitle: "A Bayesian Spline Regression Analysis of Kamala Harris's Winning"
 author: 
   - Shanjie Jiao
   - Aman Rana
@@ -32,18 +32,18 @@ library(palmerpenguins)
 The United States, as the world’s largest economy and most influential country, will hold its presidential election on November 5, 2024. Despite facing domestic challenges such as inflation, low employment rates after the pandemic, and increasing political polarization due to conflicts between the Democratic and Republican parties, which have accelerated internal tensions.As of October 2024, former President Donald Trump has secured the Republican Party nomination. However, after assassination happened on July 14, 2024, many of his supporters have become even more committed to his legacy. Meanwhile, President Joe Biden withdrew from the election on July 21, leading to the nomination of Kamala Harris as the Democratic candidate. These events have made the 2024 U.S. election increasingly complex and unpredictable, further intensifying uncertainty about the future.
 
 
-
 ## Estimand paragraph
 
-In this paper, multiple linear regression will be used to fit the dataset provide by Five Thirty Eight[use citation] to estimate Trump's election rate. 
+The estimand of this study is the predicted outcome of the 2024 U.S. Presidential Election for either Donald Trump or Kamala Harris, based on aggregated polling averages. Our analysis employs Bayesian spline regression to effectively capture the dynamic changes in voting trends over time, allowing us to forecast the likely election result. By comparing the predicted probabilities for both candidates, we aim to identify the probable winner based on current trends in voter support.
 
 ## Results paragraph
+Using Bayesian spline regression analysis on the dataset provided by FiveThirtyEight [@FiveThirtyEight], this study forecasts the outcome of the 2024 U.S. election, predicting a victory for Kamala Harris.
 
 ## Why it matters paragraph：
 
 Due to the United States' hegemonic position and unparalleled global influence, the outcome of the U.S. election will serve as a guiding light for global developments over the next four years, significantly impacting international security, trade, cooperation, and geopolitics. This article aims to provide a clearer analytical framework for political scientists, the general public, journalists, corporate strategists, and anyone globally concerned with the U.S. election.
 
-Telegraphing paragraph: The remainder of this paper is structured as follows. @sec-data we will discuss the MLR used in the prediction and the result of the MLR with its predictor variables and the response after transformation. @sec-dis the shortcomings of the study and areas for improvement will be described. @sec-A A Deep Dive to a pollster will be conducted, and @sec-B We will given a idealized survey and methodology
+Telegraphing paragraph: The remainder of this paper is structured as follows. @sec-data we will discuss the MLR used in the prediction and the result of the MLR with its predictor variables and the response after transformation. @sec-dis the shortcomings of the study and areas for improvement will be described. @sec-Appendix-A A Deep Dive to a pollster will be conducted, and @sec-Appendix-B We will given a idealized survey and methodology
 
 
 
@@ -208,7 +208,7 @@ Weaknesses and next steps should also be included.
 \appendix
 
 # Appendix 
-## A: Emerson College Polling Methodology Analysis
+## A: Emerson College Polling Methodology Analysis {#sec-Appendix-A}
 
 ### Overview
 Emerson College Polling (ECP) is a nationally recognized, non-partisan polling organization [@emerson2024about]. ECP conducted a national survey from October 30 to November 2, 2024, targeting 1,000 likely voters in the 2024 U.S. presidential election. The poll measured voter preferences between candidates Kamala Harris and Donald Trump, indicating a tie at 49% each, with third party candidates and undecided voters at one percent each [@emerson2024november]. Appendix A examines the methodology used by ECP for this poll.
@@ -260,7 +260,8 @@ The survey maintains a credibility interval of +/- 3 percentage points, with hig
 ### Conclusion
 Emerson College Polling's mixed-mode methodology effectively balances cost with demographic reach. While their weighting system helps ensure representativeness, the multi-mode approach presents trade-offs: reduced coverage bias through diverse voter outreach, but increased measurement error from combining different survey methods [@mora2011understanding]. These methodological considerations are crucial when interpreting the poll's results.
 
-## B: Idealized Survey Methodology – $100K Budget
+
+## B: Idealized Survey Methodology – $100K Budget {#sec-Appendix-B}
 
 ### Introduction
 In this appendix, we outline an idealized survey methodology for forecasting U.S. presidential elections within a budget of up to $100,000. The proposed design aims to maximize accuracy and cost-efficiency by strategically selecting sample populations, targeting key demographic groups, and effectively aggregating results.
