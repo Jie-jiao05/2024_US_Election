@@ -43,7 +43,7 @@ Using Bayesian spline regression analysis on the dataset provided by FiveThirtyE
 
 Due to the United States' hegemonic position and unparalleled global influence, the outcome of the U.S. election will serve as a guiding light for global developments over the next four years, significantly impacting international security, trade, cooperation, and geopolitics. This article aims to provide a clearer analytical framework for political scientists, the general public, journalists, corporate strategists, and anyone globally concerned with the U.S. election.
 
-The remainder of this paper is structured as follows. @sec-data we will discuss the data used in the modelling process and the result of the Bayesian Spline fit with its predictor variables and the response after transformation. @sec-dis the shortcomings of the study and areas for improvement will be described. @sec-Appendix-A A Deep Dive to a pollster will be conducted, and @sec-Appendix-B We will given a idealized survey and methodology
+The remainder of this paper is structured as follows. In the Data Section we will discuss the data used in the modelling process and the result of the Bayesian Spline fit with its predictor variables and the response after transformation. In the Discussion we delve into the shortcomings of the study and areas for improvement will be described.Appendix is a A Deep Dive to a pollster will be conducted, and Appendix B we will given a idealized survey and methodology
 
 # Data {#sec-data}
 
@@ -54,10 +54,6 @@ We use R [@citeR] and Python [@citePython] to analyze a panel of poll data from 
 Our analysis is focused on determining whether Donald Trump or Kamala Harris will win the election. We drop all other candidates and parties on the belief that they are not likely to win given how close the race is between the two leading candidates.
 
 For every observation in our data we have percentage of voter support, state, start and end dates of the poll, pollster quality, and party.
-
-## Measurement
-	
-Some paragraphs about how we go from a phenomena in the world to an entry in the dataset.
 
 ## Data Quality Variable: Numeric_Grade
 ```{r}
@@ -452,7 +448,6 @@ plot2 <- pp_check(rep_spline_model) +
   theme_classic() +
   labs(
     title = "Republicans Model",
-    subtitle = "Fatter tail above 50 suggests higher chance of upward surprises",
     x = "Predicted Outcome",
     y = "Density"
   ) +
@@ -466,19 +461,25 @@ A model summary for the Republican and Democrat fits can be found in the Appendi
 
 # Discussion {#sec-dis}
 
-## Discussion of {#sec-first-point}
+## Discussion of Empirical Results {#sec-first-point}
 
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
+Our results section allows us to make some inferences. First, we see that the Democrats are ahead, and we predict a win for Kamala Harris. However, the time series of the spline shows us that their support has been flat over time, whereas the Republican party has been showing some recent momentum which could contribute to a surprise. This is in-line with some of the literatue, with @cohn_2024 showing how Trump brings his strength later in the election cycle as voters are generally shy to show their support for him.
 
-## Second discussion point
+Our posterior checks show the variability in our uncertainty. Since we do not have normal posteriors, we can make nuanced inferences on the confidences of our prediction. The Democrats do have a higher projected voter support, but the distribution from which this came has a fatter tail on the left, and drops sharply above 49%. Which means the mean is high, but there is a substantial portion of the distribution that is in a lower voter support percentage. Additionally, if we look at the Republican posterior, it has a sharp spike near its mean, which means it is likely that they will get the losing voter support of 45%, but,
+it has a fat tail that shows that there is an unlikely but possible outcome that they win with a surprise.
 
-Please don't use these as sub-heading labels - change them to be what your point actually is.
+We can conclude, that the democrats are strongly favoured to win, but the Republicans do also have a stronger probability of an upward surprise, whereas the democrats have a stronger probabiltiy of a downward surprise.
 
-## Third discussion point
+## Limitations and Weaknesses
 
-## Weaknesses and next steps
+Our model, while providing valuable insights into voter support dynamics, has several important limitations:
 
-Weaknesses and next steps should also be included.
+- **Smoothness Assumption:** The spline regression framework assumes smooth changes in voter preferences over time, potentially missing abrupt shifts after major campaign events or breaking news.
+- **Static Pollster Quality:** Pollster quality is treated as a static measure in our model, ignoring that polling methodology and accuracy may vary over the campaign period - pollsters could improve or become less reliable over time.
+- **Limited Geographic-Temporal Interaction:** While our model includes state-level effects, it doesn't account for time-state interactions - patterns of changing support may vary across states in ways our current specification cannot capture.
+- **National Poll Classification:** We assume that polls with a NaN state value are National level polls, but this is a spurious assumption. We could be introducing state biases to the outcomes.
+
+Despite using only polls with numeric grades above a threshold, variations in pollster methodology and inherent biases in which demographics are sampled can introduce significant uncertainties. While a high numeric grade provides some quality assurance, it cannot guarantee that a pollster's methodology is free from systematic biases in terms of which population groups they reach and survey. This limitation becomes particularly apparent when considering differential voter turnout, as polls may not adequately capture certain demographic segments of the voting population, leading to coverage bias - a significant error that occurs when there is a mismatch between the sampling frame (the population being surveyed) and the actual target population of likely voters [@stantcheva2023run].
 
 \newpage
 
